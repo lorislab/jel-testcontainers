@@ -16,15 +16,17 @@
 
 package org.lorislab.jel.testcontainers.mockserver;
 
-import lombok.extern.slf4j.Slf4j;
 import org.mockserver.mock.action.ExpectationResponseCallback;
 import org.mockserver.model.HttpRequest;
 import org.mockserver.model.HttpResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.mockserver.model.HttpRequest.request;
 
-@Slf4j
 public class MockExpectationResponseCallback implements ExpectationResponseCallback {
+
+    private static final Logger log = LoggerFactory.getLogger(MockExpectationResponseCallback.class);
 
     private ExpectationResponseCallback callback;
 

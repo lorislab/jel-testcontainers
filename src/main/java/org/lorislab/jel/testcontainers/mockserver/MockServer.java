@@ -18,11 +18,12 @@ package org.lorislab.jel.testcontainers.mockserver;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import lombok.extern.slf4j.Slf4j;
 import org.mockserver.client.MockServerClient;
 import org.mockserver.model.HttpRequest;
 import org.mockserver.model.HttpResponse;
 import org.mockserver.model.HttpStatusCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.nio.file.Files;
@@ -35,8 +36,9 @@ import static com.google.common.net.MediaType.JSON_UTF_8;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 
-@Slf4j
 public class MockServer {
+
+    private static final Logger log = LoggerFactory.getLogger(MockServer.class);
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
