@@ -57,7 +57,7 @@ public class MockExpectationResponseCallback implements ExpectationResponseCallb
     public boolean isFinished() {
         boolean result = executed == expected;
         if (!result) {
-            log.info("The expection: {} does not finished yet. Executed: {} expected: {}", name, executed, expected);
+            log.info("The exception: {} does not finished yet. Executed: {} expected: {}", name, executed, expected);
         }
         return result;
     }

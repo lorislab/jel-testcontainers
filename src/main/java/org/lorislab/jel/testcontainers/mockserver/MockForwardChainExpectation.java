@@ -32,7 +32,7 @@ public class MockForwardChainExpectation {
 
     public MockForwardChainExpectation(ForwardChainExpectation expectation) {
         this.expectation = expectation;
-        this.expectation.respond((request) -> {
+        this.expectation.respond(request -> {
             int tmp = index;
             if (tmp < (callbacks.size()-1)) {
                 index++;

@@ -69,7 +69,7 @@ public class MockServer {
         for (int i = 0; i < expectations.size(); i++) {
             MockForwardChainExpectation expectation = expectations.get(i);
             for (MockExpectationResponseCallback c : expectation.getCallbacks()) {
-                log.info("Check expection at index: {} name: {} executed: {} expected: {}", i, c.getName(), c.getExecuted(), c.getExpected());
+                log.info("Check exception at index: {} name: {} executed: {} expected: {}", i, c.getName(), c.getExecuted(), c.getExpected());
                 await().atMost(timeout, SECONDS).alias(c.getName()).until(c::isFinished);
             }
         }
