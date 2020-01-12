@@ -15,11 +15,11 @@ public class ContainerConfig {
 
     public String name;
 
-    public boolean integrationTest;
+    public boolean integrationTest = true;
 
-    public boolean unitTest;
+    public boolean unitTest = true;
 
-    public boolean imagePull;
+    public boolean imagePull = true;
 
     public Integer priority = DEFAULT_PRIORITY;
 
@@ -27,9 +27,9 @@ public class ContainerConfig {
 
     public String waitLogRegex;
 
-    public int waitLogTimes;
+    public int waitLogTimes = 1;
 
-    public boolean log;
+    public boolean log = true;
 
     public Map<String, String> environments;
 
