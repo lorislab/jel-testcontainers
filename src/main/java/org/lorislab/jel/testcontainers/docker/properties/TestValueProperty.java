@@ -1,11 +1,13 @@
-package org.lorislab.jel.testcontainers.docker;
+package org.lorislab.jel.testcontainers.docker.properties;
+
+import org.lorislab.jel.testcontainers.docker.DockerTestEnvironment;
 
 public class TestValueProperty extends TestProperty {
 
     String value;
 
     @Override
-    String getValue(DockerTestEnvironment environment) {
+    public String getValue(DockerTestEnvironment environment) {
       return value;
     }
 

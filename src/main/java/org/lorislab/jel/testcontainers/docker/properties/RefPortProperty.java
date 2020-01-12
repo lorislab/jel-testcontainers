@@ -1,4 +1,7 @@
-package org.lorislab.jel.testcontainers.docker;
+package org.lorislab.jel.testcontainers.docker.properties;
+
+import org.lorislab.jel.testcontainers.docker.DockerComposeService;
+import org.lorislab.jel.testcontainers.docker.DockerTestEnvironment;
 
 public class RefPortProperty extends TestProperty {
 
@@ -7,12 +10,12 @@ public class RefPortProperty extends TestProperty {
     String port;
 
     @Override
-    String getValue(DockerTestEnvironment environment) {
+    public String getValue(DockerTestEnvironment environment) {
         DockerComposeService dcs = environment.getService(service);
         return "" + dcs.getPort(Integer.parseInt(port));
     }
 
-    static RefPortProperty createTestProperty(String name, String[] data) {
+    public static RefPortProperty createTestProperty(String name, String[] data) {
         RefPortProperty r = new RefPortProperty();
         r.name = name;
         r.service = data[1];

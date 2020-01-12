@@ -1,23 +1,17 @@
 package org.lorislab.jel.testcontainers.docker;
 
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.lorislab.jel.testcontainers.docker.properties.TestProperty;
+import org.lorislab.jel.testcontainers.docker.properties.TestPropertyLoader;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ContainerConfig {
 
-    static final Pattern REF_PATTERN = Pattern.compile("\\$\\{(.*?)}");
-
     public static final Integer DEFAULT_PRIORITY = 100;
-
-    static final Map<String, TestProperty.TestPropertyBuilder> BUILDER = new HashMap<>();
-
-    static {
-        BUILDER.put("port", RefPortProperty::createTestProperty);
-        BUILDER.put("host", RefHostProperty::createTestProperty);
-        BUILDER.put("url", RefUrlProperty::createTestProperty);
-    }
 
     public String name;
 
@@ -60,6 +54,12 @@ public class ContainerConfig {
 
         // docker image
         image = (String) data.get("image");
+        // docker compose environments
+        environments = getMap(data, "environment");
+        // docker compose volumes
+        volumes = getMapFromList(data, "volumes", ":");
+        // docker compose ports
+        ports = getMapFromList(data, "ports", ":");
 
         // labels
         Map<String, String> labels = getMapFromList(data, "labels", "=");
@@ -82,36 +82,19 @@ public class ContainerConfig {
             priority = getLabelInteger(labels, "test.priority", DEFAULT_PRIORITY);
         }
 
-        environments = getMap(data, "environment");
-
-        volumes = getMapFromList(data, "volumes", ":");
-
-        ports = getMapFromList(data, "ports", ":");
-
+        // test properties store in the labels
         labels.forEach((k, v) -> {
             if (k.startsWith("test.property")) {
                 String key = k.substring("test.property.".length());
-                properties.add(createRefProperty(key, v));
+                properties.add(TestPropertyLoader.createTestProperty(key, v));
             } else if (k.startsWith("test.env.")) {
                 String key = k.substring("test.env.".length());
-                refEnvironments.add(createRefProperty(key, v));
+                refEnvironments.add(TestPropertyLoader.createTestProperty(key, v));
             }
         });
     }
 
-    private TestProperty createRefProperty(String key, String value) {
-        Matcher m = REF_PATTERN.matcher(value);
-        if (m.find()) {
-            String v = m.group(1);
-            String[] data = v.split(":", 3);
-            TestProperty.TestPropertyBuilder builder = BUILDER.get(data[0]);
-            if (builder != null) {
-                return builder.createTestProperty(key, data);
-            }
-            throw new IllegalStateException("Not supported type " + data[0]);
-        }
-        return TestValueProperty.createTestProperty(key, value);
-    }
+
 
     private static Map<String, String> getMap(Map<String, Object> properties, String key) {
         Object map = properties.get(key);

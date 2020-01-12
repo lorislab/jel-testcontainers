@@ -1,6 +1,7 @@
 package org.lorislab.jel.testcontainers.docker;
 
 import org.lorislab.jel.testcontainers.ContainerLogger;
+import org.lorislab.jel.testcontainers.docker.properties.TestProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.GenericContainer;
