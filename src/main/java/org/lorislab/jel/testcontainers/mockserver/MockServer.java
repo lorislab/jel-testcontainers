@@ -31,10 +31,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.*;
 
 import static com.google.common.net.MediaType.JSON_UTF_8;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.await;
 
 public class MockServer {
 
@@ -65,14 +65,24 @@ public class MockServer {
         return e;
     }
 
-    public void isFinished() {
+    public MockExpectationResponseCallback isFinished() {
         for (int i = 0; i < expectations.size(); i++) {
             MockForwardChainExpectation expectation = expectations.get(i);
             for (MockExpectationResponseCallback c : expectation.getCallbacks()) {
-                log.info("Check exception at index: {} name: {} executed: {} expected: {}", i, c.getName(), c.getExecuted(), c.getExpected());
-                await().atMost(timeout, SECONDS).alias(c.getName()).until(c::isFinished);
+                CountDownLatch cd = c.getCountDownLatch();
+                log.info("Check exception at index: {} name: {} executed: {} expected: {}", i, c.getName(), cd.getCount(), c.getCount());
+                try {
+                    if (!cd.await(timeout, TimeUnit.SECONDS)) {
+                        log.error("Waiting time elapsed before the count at index: {} name: {} executed: {} expected: {}", i, c.getName(), cd.getCount(), c.getCount());
+                        return c;
+                    }
+                } catch (InterruptedException ex) {
+                    log.error("Interrupted exception at index: {} name: {} executed: {} expected: {}", i, c.getName(), cd.getCount(), c.getCount());
+                    return c;
+                }
             }
         }
+        return null;
     }
 
     public static HttpResponse withResponse() {

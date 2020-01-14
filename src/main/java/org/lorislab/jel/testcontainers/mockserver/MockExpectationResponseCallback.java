@@ -22,6 +22,8 @@ import org.mockserver.model.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.CountDownLatch;
+
 import static org.mockserver.model.HttpRequest.request;
 
 public class MockExpectationResponseCallback implements ExpectationResponseCallback {
@@ -30,42 +32,35 @@ public class MockExpectationResponseCallback implements ExpectationResponseCallb
 
     private ExpectationResponseCallback callback;
 
-    private int executed = 0;
-
-    private int expected;
+    private int count;
 
     private String name;
 
-    public MockExpectationResponseCallback(String name, ExpectationResponseCallback callback, int expected) {
+    private CountDownLatch countDownLatch;
+
+    public MockExpectationResponseCallback(String name, ExpectationResponseCallback callback, int count) {
         this.callback = callback;
-        this.expected = expected;
+        this.count = count;
+        this.countDownLatch = new CountDownLatch(count);
         this.name = name;
+    }
+
+    public CountDownLatch getCountDownLatch() {
+        return countDownLatch;
     }
 
     public String getName() {
         return name;
     }
 
-    public int getExecuted() {
-        return executed;
-    }
-
-    public int getExpected() {
-        return expected;
-    }
-
-    public boolean isFinished() {
-        boolean result = executed == expected;
-        if (!result) {
-            log.info("The exception: {} does not finished yet. Executed: {} expected: {}", name, executed, expected);
-        }
-        return result;
+    public int getCount() {
+        return count;
     }
 
     @Override
     public HttpResponse handle(HttpRequest httpRequest) {
-        executed = executed+1;
-        log.info("Execute response {}  {}", executed, expected);
+        countDownLatch.countDown();
+        log.info("Wait for execution {} {}", countDownLatch.getCount(), count);
         return callback.handle(request());
     }
 }
