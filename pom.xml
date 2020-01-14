@@ -58,11 +58,6 @@
             <artifactId>mockserver-client-java</artifactId>
             <version>5.5.4</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.awaitility</groupId>-->
-<!--            <artifactId>awaitility</artifactId>-->
-<!--            <version>3.1.6</version>-->
-<!--        </dependency>-->
 
         <!-- TEST -->
         <dependency>

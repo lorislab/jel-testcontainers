@@ -72,6 +72,7 @@ public class MockServer {
                 CountDownLatch cd = c.getCountDownLatch();
                 log.info("Check exception at index: {} name: {} executed: {} expected: {}", i, c.getName(), cd.getCount(), c.getCount());
                 try {
+                    log.info("Wait for mock callback '{}' timeout: {}s", c.getName(), timeout);
                     if (!cd.await(timeout, TimeUnit.SECONDS)) {
                         log.error("Waiting time elapsed before the count at index: {} name: {} executed: {} expected: {}", i, c.getName(), cd.getCount(), c.getCount());
                         return c;

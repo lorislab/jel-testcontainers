@@ -60,7 +60,7 @@ public class MockExpectationResponseCallback implements ExpectationResponseCallb
     @Override
     public HttpResponse handle(HttpRequest httpRequest) {
         countDownLatch.countDown();
-        log.info("Wait for execution {} {}", countDownLatch.getCount(), count);
+        log.info("Wait for execution '{}' executed {}  expected {}", name, count - countDownLatch.getCount(), count);
         return callback.handle(request());
     }
 }
