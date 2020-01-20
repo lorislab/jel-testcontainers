@@ -34,7 +34,6 @@ import java.util.List;
 import java.util.concurrent.*;
 
 import static com.google.common.net.MediaType.JSON_UTF_8;
-import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class MockServer {
 

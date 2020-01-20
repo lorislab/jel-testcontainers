@@ -22,7 +22,7 @@ public class TestPropertyLoaderTest {
 
     @Test
     public void testGroupProperty() {
-        String value1 = "XXX";
+        String value1 = "123456";
         System.setProperty("value1", value1);
 
         DockerTestEnvironment env = new DockerTestEnvironment();
