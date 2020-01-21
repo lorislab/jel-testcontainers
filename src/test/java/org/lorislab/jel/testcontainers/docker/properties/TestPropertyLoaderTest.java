@@ -26,7 +26,7 @@ public class TestPropertyLoaderTest {
         System.setProperty("value1", value1);
 
         DockerTestEnvironment env = new DockerTestEnvironment();
-        String value = "test ${prop:value1} should be ${prop:value1}";
+        String value = "test $${prop:value1} should be $${prop:value1}";
         String name = "name";
         TestProperty property = TestPropertyLoader.createTestProperty(name, value);
         Assertions.assertNotNull(property);
