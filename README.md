@@ -118,7 +118,8 @@ The system property `<test.integration>true</test.integration>` activate the int
 |---|---|---|---|
 | test.integration=true | `boolean` | `true` | enable the docker for the integration test |
 | test.unit=true | `boolean` | `true` | enable the docker for the unit test |
-| test.image.pull=true | `boolean` | `true` | pull docker image before test |
+| test.image.pull=DEFAULT | `string` | `DEFAULT,ALWAYS,MAX_AGE` | pull docker image before test |
+| test.image.pull.max_age | `string` | `PT10` | only for the `MAX_AGE` pull docker image before test if older than duration. Default: 10s |
 | test.Wait.forLogMessage.regex= | `string` | `null` | regex of the WaitStrategy for log messages |
 | test.Wait.forLogMessage.times=1 | `int` | `1` | the number of times the pattern is expected in the WaitStrategy |
 | test.Log=true | `boolean` | `true` | enabled log of the docker container |
@@ -184,7 +185,7 @@ services:
     labels:
       - "test.unit=false"
       - "test.priority=101"
-      - "test.image.pull=false"
+      - "test.image.pull=DEFAULT"
       - "test.env.QUARKUS_DATASOURCE_URL=jdbc:postgresql://p6-executor-postgres:5432/p6?sslmode=disable"
       - "test.env.QUARKUS_INFINISPAN_CLIENT_SERVER_LIST=p6-executor-infinispan:11222"
     networks:
