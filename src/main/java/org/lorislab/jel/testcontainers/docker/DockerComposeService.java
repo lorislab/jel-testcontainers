@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.wait.strategy.Wait;
-import org.testcontainers.images.ImagePullPolicy;
+import org.testcontainers.images.PullPolicy;
 import org.testcontainers.utility.MountableFile;
 
 import java.util.*;
@@ -118,9 +118,17 @@ public class DockerComposeService {
             result.withNetwork(network).withNetworkAliases(config.name);
 
             // image pull policy
-            if (!config.imagePull) {
-                result.withImagePullPolicy((ImagePullPolicy) imageName -> false);
+            switch ( config.imagePull) {
+                case ALWAYS:
+                    result.withImagePullPolicy(PullPolicy.alwaysPull());
+                    break;
+                case MAX_AGE:
+                    result.withImagePullPolicy(PullPolicy.ageBased(config.imagePullDuration));
+                    break;
+                case DEFAULT:
+                    result.withImagePullPolicy(PullPolicy.defaultPolicy());
             }
+
             // wait log rule
             if (config.waitLogRegex != null) {
                 result.waitingFor(Wait.forLogMessage(config.waitLogRegex, config.waitLogTimes));
