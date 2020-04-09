@@ -1,4 +1,6 @@
-# jel-testcontainers
+# New implementation [quarkus-testcontainers](https://github.com/lorislab/quarkus-testcontainers)
+
+### jel-testcontainers
 
 JEL testcontainers library for the testcontainers framework
 
